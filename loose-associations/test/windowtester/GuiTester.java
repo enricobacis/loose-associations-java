@@ -96,7 +96,7 @@ public class GuiTester extends UITestCaseSwing {
 		ui.click(new JButtonLocator("x"));
 	}
 	
-	public void testRealProblemWithQuerier() throws Exception {
+	public void testRealProblem() throws Exception {
 		IUIContext ui = getUI();
 		
 		ui.click(new JMenuItemLocator("Problems/New real problem"));		
@@ -140,7 +140,11 @@ public class GuiTester extends UITestCaseSwing {
 		assertTrue(result.contains("Exported"));
 		
 		ui.click(new JButtonLocator("x"));
-		
+	}
+	
+	@Test
+	public void testQuerier() throws Exception {
+		IUIContext ui = getUI();
 		ui.click(new JMenuItemLocator("Utilities/New querier"));
 		
 		ui.click(new NamedWidgetLocator("chooseQueryDatabase"));
@@ -169,7 +173,6 @@ public class GuiTester extends UITestCaseSwing {
 		
 		ui.click(new JButtonLocator("Disconnect"));
 		ui.click(new JButtonLocator("x"));
-		
 	}
 	
 	@Test

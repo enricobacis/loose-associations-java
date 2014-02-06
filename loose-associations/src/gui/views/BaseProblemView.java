@@ -132,15 +132,15 @@ public abstract class BaseProblemView extends JPanel implements Observer {
 		sl_realDatabase.putConstraint(SpringLayout.NORTH, input, 24, SpringLayout.NORTH, this);
 		sl_realDatabase.putConstraint(SpringLayout.WEST, input, 27, SpringLayout.WEST, this);
 		sl_realDatabase.putConstraint(SpringLayout.SOUTH, input, 160, SpringLayout.NORTH, this);
-		sl_realDatabase.putConstraint(SpringLayout.EAST, input, -457, SpringLayout.EAST, this);
+		sl_realDatabase.putConstraint(SpringLayout.EAST, input, 340, SpringLayout.WEST, this);
 		input.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		this.add(input);
 		
 		JPanel output = new JPanel();
 		sl_realDatabase.putConstraint(SpringLayout.NORTH, output, 15, SpringLayout.SOUTH, input);
-		sl_realDatabase.putConstraint(SpringLayout.WEST, output, 27, SpringLayout.WEST, this);
+		sl_realDatabase.putConstraint(SpringLayout.WEST, output, 0, SpringLayout.WEST, input);
 		sl_realDatabase.putConstraint(SpringLayout.SOUTH, output, 90, SpringLayout.SOUTH, input);
-		sl_realDatabase.putConstraint(SpringLayout.EAST, output, -457, SpringLayout.EAST, this);
+		sl_realDatabase.putConstraint(SpringLayout.EAST, output, 0, SpringLayout.EAST, input);
 		output.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		this.add(output);
 		SpringLayout sl_output = new SpringLayout();
@@ -292,6 +292,27 @@ public abstract class BaseProblemView extends JPanel implements Observer {
 		sl_realDatabase.putConstraint(SpringLayout.EAST, btnStop, 0, SpringLayout.EAST, configuration);
 		this.add(btnStop);
 		
+		final JComboBox<ErrorLevel> comboErrorLevel = new JComboBox<ErrorLevel>();
+		comboErrorLevel.setToolTipText("change the logger level");
+		sl_realDatabase.putConstraint(SpringLayout.NORTH, comboErrorLevel, 0, SpringLayout.NORTH, btnStart);
+		sl_realDatabase.putConstraint(SpringLayout.WEST, comboErrorLevel, -145, SpringLayout.WEST, btnStart);
+		sl_realDatabase.putConstraint(SpringLayout.SOUTH, comboErrorLevel, 0, SpringLayout.SOUTH, btnStart);
+		comboErrorLevel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				BaseProblemView.this.controller.setLoggerLevel(((ErrorLevel) comboErrorLevel.getSelectedItem()).getValue());
+			}
+		});
+		
+		comboErrorLevel.setModel(new DefaultComboBoxModel<ErrorLevel>(ErrorLevel.values()));
+		comboErrorLevel.setSelectedIndex(2);
+		sl_realDatabase.putConstraint(SpringLayout.EAST, comboErrorLevel, -45, SpringLayout.WEST, btnStart);
+		add(comboErrorLevel);
+		
+		JLabel lbllogLevel = new JLabel("log level");
+		sl_realDatabase.putConstraint(SpringLayout.NORTH, lbllogLevel, 4, SpringLayout.NORTH, comboErrorLevel);
+		sl_realDatabase.putConstraint(SpringLayout.EAST, lbllogLevel, -20, SpringLayout.WEST, comboErrorLevel);
+		add(lbllogLevel);
+		
 		JPanel results = new JPanel();
 		sl_realDatabase.putConstraint(SpringLayout.NORTH, results, 15, SpringLayout.SOUTH, output);
 		sl_realDatabase.putConstraint(SpringLayout.SOUTH, results, 78, SpringLayout.SOUTH, output);
@@ -314,7 +335,7 @@ public abstract class BaseProblemView extends JPanel implements Observer {
 		
 		JLabel lblFirstScanProgress = new JLabel("first scan progress");
 		sl_results.putConstraint(SpringLayout.NORTH, lblFirstScanProgress, 0, SpringLayout.NORTH, lblStatus);
-		sl_results.putConstraint(SpringLayout.WEST, lblFirstScanProgress, 300, SpringLayout.WEST, results);
+		sl_results.putConstraint(SpringLayout.WEST, lblFirstScanProgress, -394, SpringLayout.EAST, results);
 		results.add(lblFirstScanProgress);
 		
 		progressFirstScan = new JProgressBar();
@@ -374,27 +395,6 @@ public abstract class BaseProblemView extends JPanel implements Observer {
 		// move the caret to follow the text added with append
 		DefaultCaret caret = (DefaultCaret) txtrLogger.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		
-		final JComboBox<ErrorLevel> comboErrorLevel = new JComboBox<ErrorLevel>();
-		comboErrorLevel.setToolTipText("change the logger level");
-		sl_realDatabase.putConstraint(SpringLayout.NORTH, comboErrorLevel, 0, SpringLayout.NORTH, btnStart);
-		sl_realDatabase.putConstraint(SpringLayout.WEST, comboErrorLevel, -140, SpringLayout.WEST, btnStart);
-		sl_realDatabase.putConstraint(SpringLayout.SOUTH, comboErrorLevel, 0, SpringLayout.SOUTH, btnStart);
-		comboErrorLevel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				BaseProblemView.this.controller.setLoggerLevel(((ErrorLevel) comboErrorLevel.getSelectedItem()).getValue());
-			}
-		});
-		
-		comboErrorLevel.setModel(new DefaultComboBoxModel<ErrorLevel>(ErrorLevel.values()));
-		comboErrorLevel.setSelectedIndex(2);
-		sl_realDatabase.putConstraint(SpringLayout.EAST, comboErrorLevel, -40, SpringLayout.WEST, btnStart);
-		add(comboErrorLevel);
-		
-		JLabel lbllogLevel = new JLabel("log level");
-		sl_realDatabase.putConstraint(SpringLayout.NORTH, lbllogLevel, 4, SpringLayout.NORTH, comboErrorLevel);
-		sl_realDatabase.putConstraint(SpringLayout.EAST, lbllogLevel, -20, SpringLayout.WEST, comboErrorLevel);
-		add(lbllogLevel);
 
 	}
 	

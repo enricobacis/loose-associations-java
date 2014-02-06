@@ -72,6 +72,10 @@ public class LooseApp {
 			public void run() {
 				try {
 					LooseApp window = new LooseApp();
+					
+					// The following two commands center the frame in the screen
+					window.frmLooseAssociations.pack();
+					window.frmLooseAssociations.setLocationRelativeTo(null);
 					window.frmLooseAssociations.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -94,8 +98,8 @@ public class LooseApp {
 		frmLooseAssociations = new JFrame();
 		frmLooseAssociations.setTitle("Loose Associations");
 		frmLooseAssociations.setResizable(true);
-		frmLooseAssociations.setMinimumSize(new Dimension(800, 600));
-		frmLooseAssociations.setBounds(100, 100, 800, 600);
+		frmLooseAssociations.setMinimumSize(new Dimension(800, 560));
+		frmLooseAssociations.setSize(800, 560);
 		
 		JPanel cards = new JPanel();
 		frmLooseAssociations.getContentPane().add(cards, BorderLayout.CENTER);
