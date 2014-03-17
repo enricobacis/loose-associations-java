@@ -1,12 +1,15 @@
 package utils.tuples;
 
+import java.util.Arrays;
+import java.util.Iterator;
+
 /**
  * The Class Pair.
  *
  * @param <F> the generic type
  * @param <S> the generic type
  */
-public class Pair<F, S> {
+public class Pair<F, S> implements Iterable<Object> {
 	
 	/** The first. */
 	protected final F first;
@@ -96,6 +99,11 @@ public class Pair<F, S> {
 		
 		return (((Pair<?, ?>) other).first.equals(first)) &&
 			   (((Pair<?, ?>) other).second.equals(second));	
+	}
+
+	@Override
+	public Iterator<Object> iterator() {
+		return Arrays.asList(first, second).iterator();
 	}
 	
 }

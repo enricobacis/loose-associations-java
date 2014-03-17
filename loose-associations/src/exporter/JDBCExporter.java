@@ -48,7 +48,7 @@ public class JDBCExporter extends BaseExporter {
 	public JDBCExporter(BaseTable table, BaseFragments fragments, BaseAssociations associations, Logger logger) {	
 		super(table, fragments, associations, logger);
 	}
-
+	
 	/**
 	 * Export the loose association to the connection that
 	 * can be created by classForName and url.
@@ -58,13 +58,26 @@ public class JDBCExporter extends BaseExporter {
 	 * @return true, if successful
 	 */
 	protected boolean export(String classForName, String url) {
+		return export(classForName, url, null);
+	}
+
+	/**
+	 * Export the loose association to the connection that
+	 * can be created by classForName and url.
+	 *
+	 * @param classForName the class for name
+	 * @param url the url to the database
+	 * @param preSQL command to execute on the database before exporting
+	 * @return true, if successful
+	 */
+	protected boolean export(String classForName, String url, String preSQL) {
 		boolean result = false;
 		Connection connection = null;
 		
 		try {
 			Class.forName(classForName);
 			connection = DriverManager.getConnection(url);
-			result = this.export(connection);
+			result = export(connection, preSQL);
 			logger.info("== Loose Exported ==");
 			
 		} catch (ClassNotFoundException e) {
@@ -85,7 +98,7 @@ public class JDBCExporter extends BaseExporter {
 		
 		return result;
 	}
-
+	
 	/**
 	 * Export the loose association to the connection.
 	 *
@@ -93,6 +106,17 @@ public class JDBCExporter extends BaseExporter {
 	 * @return true, if successful
 	 */
 	public boolean export(Connection connection) {
+		return export(connection, null);
+	}
+
+	/**
+	 * Export the loose association to the connection.
+	 *
+	 * @param connection the connection
+	 * @param preSQL command to execute on the database before exporting
+	 * @return true, if successful
+	 */
+	public boolean export(Connection connection, String preSQL) {
 		if (connection == null) {
 			logger.error("No connection set");
 			return false;
@@ -100,6 +124,11 @@ public class JDBCExporter extends BaseExporter {
 		
 		try {
 			connection.setAutoCommit(false);
+			
+			Statement stmt = connection.createStatement();
+			for (String sql: preSQL.split("\\s*;\\s*"))
+				stmt.execute(sql);
+			
 			createAssociationsTable(connection);
 			createFragmentsTables(connection);
 			createSchemaTable(connection);

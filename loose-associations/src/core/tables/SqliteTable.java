@@ -16,7 +16,7 @@ public class SqliteTable extends JDBCTable {
 	 * @throws Exception the exception
 	 */
 	public SqliteTable(String databasePath, String tablename, Logger logger) throws Exception {
-		this(databasePath, tablename, null, logger);
+		this(databasePath, tablename, null, null, logger);
 	}
 	
 	/**
@@ -27,7 +27,7 @@ public class SqliteTable extends JDBCTable {
 	 * @throws Exception the exception
 	 */
 	public SqliteTable(String databasePath, String tablename) throws Exception {
-		this(databasePath, tablename, null, null);
+		this(databasePath, tablename, null, null, null);
 	}
 	
 	/**
@@ -36,11 +36,12 @@ public class SqliteTable extends JDBCTable {
 	 * @param databasePath the database path
 	 * @param tablename the tablename
 	 * @param orderBy the order by
+	 * @param limit limit
 	 * @param logger the logger
 	 * @throws Exception the exception
 	 */
-	public SqliteTable(String databasePath, String tablename, String orderBy, Logger logger) throws Exception {
-		super("org.sqlite.JDBC", "jdbc:sqlite:" + databasePath, tablename, orderBy, logger);
+	public SqliteTable(String databasePath, String tablename, String orderBy, Integer limit, Logger logger) throws Exception {
+		super("org.sqlite.JDBC", "jdbc:sqlite:" + databasePath, tablename, orderBy, limit, logger);
 	}
 	
 	/**
@@ -52,7 +53,7 @@ public class SqliteTable extends JDBCTable {
 	 * @throws Exception the exception
 	 */
 	public SqliteTable(String databasePath, String tablename, String orderBy) throws Exception {
-		this(databasePath, tablename, orderBy, null);
+		this(databasePath, tablename, orderBy, null, null);
 	}
 
 }

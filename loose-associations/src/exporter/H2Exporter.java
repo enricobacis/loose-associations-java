@@ -44,5 +44,16 @@ public class H2Exporter extends JDBCExporter {
 	public boolean export(String databasePath) {
 		return super.export("org.h2.Driver", "jdbc:h2:" + databasePath);
 	}
+	
+	/**
+	 * Export the data to the database.
+	 *
+	 * @param databasePath the database path
+	 * @param preSQL command to execute on the database before exporting
+	 * @return true, if successful
+	 */
+	public boolean export(String databasePath, String preSQL) {
+		return super.export("org.h2.Driver", "jdbc:h2:" + databasePath, preSQL);
+	}
 
 }

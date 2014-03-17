@@ -66,5 +66,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<artifactId>trove4j</artifactId>
 		<version>3.0.3</version>
 	</dependency>
+	<dependency>
+        <groupId>net.sourceforge.argparse4j</groupId>
+        <artifactId>argparse4j</artifactId>
+        <version>0.4.3</version>
+    </dependency>
   </dependencies>
 </project>

@@ -14,6 +14,7 @@ public class Timer {
 	
 	/** The time the timer has been created or reset. */
 	private long started;
+	private long stopped;
 	
 	/** The decimal formatter that keeps only 2 decimal places. */
 	DecimalFormat df = new DecimalFormat("0.00");
@@ -22,14 +23,19 @@ public class Timer {
 	 * Instantiates a new timer.
 	 */
 	public Timer() {
-		started = System.currentTimeMillis();
+		reset();
 	}
 	
 	/**
 	 * Reset the timer.
 	 */
 	public void reset() {
-		started = 0;
+		started = System.currentTimeMillis();
+		stopped = 0;
+	}
+	
+	public void stop() {
+		stopped = (System.currentTimeMillis() - started);
 	}
 	
 	/**
@@ -38,7 +44,7 @@ public class Timer {
 	 * @return the elapsed time in seconds
 	 */
 	public double get() {
-		return (System.currentTimeMillis() - started) / 1000.0;
+		return ((stopped == 0) ? (System.currentTimeMillis() - started) : stopped) / 1000.0;
 	}
 	
 	/* (non-Javadoc)

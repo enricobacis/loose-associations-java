@@ -44,5 +44,16 @@ public class SqliteExporter extends JDBCExporter {
 	public boolean export(String databasePath) {
 		return super.export("org.sqlite.JDBC", "jdbc:sqlite:" + databasePath);
 	}
+	
+	/**
+	 * Export the data to the database.
+	 *
+	 * @param databasePath the database path
+	 * @param preSQL command to execute on the database before exporting
+	 * @return true, if successful
+	 */
+	public boolean export(String databasePath, String preSQL) {
+		return super.export("org.sqlite.JDBC", "jdbc:sqlite:" + databasePath, preSQL);
+	}
 
 }

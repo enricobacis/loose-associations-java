@@ -82,8 +82,8 @@ public class GreedyLoose extends Observable implements LooseSolver {
 	/** The operation stack used in the second scan to linearize the operations. */
 	private Stack<Operation> opstack;
 	
-	/** The elapsed time to make the association. */
-	private String elapsedTime = "";
+	/** The association timer. */
+	private Timer timer;
 
 	/** Tells if the association has to stop. */
 	private boolean isStopped;
@@ -165,6 +165,15 @@ public class GreedyLoose extends Observable implements LooseSolver {
 	 */
 	public BaseConstraints getConstraints() {
 		return constraints;
+	}
+	
+	/**
+	 * Gets the elapsed time.
+	 * 
+	 * @return the elapsed time
+	 */
+	public double getElapsedTime() {
+		return timer.get();
 	}
 	
 	/**
@@ -621,7 +630,7 @@ public class GreedyLoose extends Observable implements LooseSolver {
 	@Override
 	public Triplet<BaseAssociations, BaseFragments, Set<Integer>> associate(final List<Integer> kList) throws Exception {
 		
-		Timer timer = new Timer();
+		timer = new Timer();
 		isStopped = false;
 		
 		fragments.setKList(kList);
@@ -701,10 +710,11 @@ public class GreedyLoose extends Observable implements LooseSolver {
 			}
 		}
 
+		timer.stop();
+		logger.info("{} second scan done after {} stack operations", timer, operations);
+		
 		setChanged();
 		notifyObservers(Triplet.of(Status.DONE, (int) timer.get(), dropped.size()));
-		logger.info("{} second scan done after {} stack operations", timer, operations);
-		this.elapsedTime = timer.toString();
 		
 		return Triplet.of(this.associations, this.fragments, this.dropped);
 	}
@@ -718,7 +728,7 @@ public class GreedyLoose extends Observable implements LooseSolver {
 			return "== Loose not associated yet ==";
 		
 		StringBuilder sb = new StringBuilder(200);
-		sb.append("== Loose association completed " + elapsedTime + " ==\n\n");
+		sb.append("== Loose association completed " + timer + " ==\n\n");
 		sb.append("Average group sizes:\n");
 		for (Fragment fragment: fragments)
 			sb.append("Fragment " + fragment.id + ": requested " + fragment.getK() +

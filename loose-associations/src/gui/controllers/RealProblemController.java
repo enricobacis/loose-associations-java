@@ -62,11 +62,11 @@ public class RealProblemController extends ProblemController {
 				
 				switch (type) {
 				case H2:
-					table = new H2Table(inputFile, tablename, orderBy, logger);
+					table = new H2Table(inputFile, tablename, orderBy, null, logger);
 					fetched = true;
 					break;
 				case SQLITE:
-					table = new SqliteTable(inputFile, tablename, orderBy, logger);
+					table = new SqliteTable(inputFile, tablename, orderBy, null, logger);
 					fetched = true;
 					break;
 				default:

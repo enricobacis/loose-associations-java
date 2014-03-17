@@ -1,5 +1,8 @@
 package utils.tuples;
 
+import java.util.Arrays;
+import java.util.Iterator;
+
 /**
  * The Class Triplet.
  *
@@ -89,6 +92,11 @@ public class Triplet<F, S, T> extends Pair<F, S> {
 		
 		return super.equals(other) &&
 				(((Triplet<?, ?, ?>) other).third.equals(third));	
+	}
+	
+	@Override
+	public Iterator<Object> iterator() { 
+		return Arrays.asList(first, second, third).iterator();
 	}
 	
 }

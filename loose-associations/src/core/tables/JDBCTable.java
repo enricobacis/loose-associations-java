@@ -45,17 +45,18 @@ public class JDBCTable extends ListTable {
 	 * @param url the url
 	 * @param tablename the tablename
 	 * @param orderBy the orderBy
+	 * @param limit limit
 	 * @param logger the logger
 	 * @throws Exception the exception
 	 */
-	protected JDBCTable(String classForName, String url, String tablename, String orderBy, Logger logger) throws Exception {
+	protected JDBCTable(String classForName, String url, String tablename, String orderBy, Integer limit, Logger logger) throws Exception {
 		this(tablename, orderBy, logger);
 		String message;
 		
 		try {
 			Class.forName(classForName);
 			Connection connection = DriverManager.getConnection(url);
-			fetchTable(connection);
+			fetchTable(connection, limit);
 			
 			if (connection != null && !connection.isClosed())
 				connection.close();
@@ -80,7 +81,7 @@ public class JDBCTable extends ListTable {
 	 * @throws Exception the exception
 	 */
 	protected JDBCTable(String classForName, String url, String tablename, String orderBy) throws Exception {
-		this(classForName, url, tablename, orderBy, null);
+		this(classForName, url, tablename, orderBy, null, null);
 	}
 
 	/**
@@ -92,7 +93,7 @@ public class JDBCTable extends ListTable {
 	 * @throws SQLException the SQL exception
 	 */
 	public JDBCTable(Connection connection, String tablename, Logger logger) throws SQLException {
-		this(connection, tablename, null, logger);
+		this(connection, tablename, null, null, logger);
 	}
 	
 	/**
@@ -103,7 +104,7 @@ public class JDBCTable extends ListTable {
 	 * @throws SQLException the SQL exception
 	 */
 	public JDBCTable(Connection connection, String tablename) throws SQLException {
-		this(connection, tablename, null, null);
+		this(connection, tablename, null, null, null);
 	}
 	
 	/**
@@ -112,12 +113,13 @@ public class JDBCTable extends ListTable {
 	 * @param connection the connection
 	 * @param tablename the tablename
 	 * @param orderBy the orderBy
+	 * @param limit limit
 	 * @param logger the logger
 	 * @throws SQLException the SQL exception
 	 */
-	public JDBCTable(Connection connection, String tablename, String orderBy, Logger logger) throws SQLException {
+	public JDBCTable(Connection connection, String tablename, String orderBy, Integer limit, Logger logger) throws SQLException {
 		this(tablename, orderBy, logger);
-		fetchTable(connection);
+		fetchTable(connection, limit);
 	}
 	
 	/**
@@ -129,7 +131,7 @@ public class JDBCTable extends ListTable {
 	 * @throws SQLException the SQL exception
 	 */
 	public JDBCTable(Connection connection, String tablename, String orderBy) throws SQLException {
-		this(connection, tablename, orderBy, null);
+		this(connection, tablename, orderBy, null, null);
 	}
 	
 	/**
@@ -138,10 +140,16 @@ public class JDBCTable extends ListTable {
 	 * @param connection the connection
 	 * @throws SQLException the SQL exception
 	 */
-	protected void fetchTable(Connection connection) throws SQLException {
+	protected void fetchTable(Connection connection, Integer limit) throws SQLException {
 		this.connection = connection;
 		
 		StringBuilder sb = new StringBuilder("SELECT * FROM ").append(tablename);
+		
+		// we have a double select * from so we can chain the other order by requested
+		// the function RANDOM() is to make a sample
+		if (limit != null)
+			sb = new StringBuilder("SELECT * FROM (").append(sb.toString()).append(" ORDER BY RANDOM() LIMIT ").append(limit).append(") ");
+		
 		if (orderBy != null && !orderBy.isEmpty())
 			sb.append(" ORDER BY ").append(orderBy);
 		
